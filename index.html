@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font: 13px Helvetica, Arial;
+      }
+      form {
+        background: #000;
+        padding: 3px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: #5ab9ea;
+      }
+      form input {
+        border: 0;
+        padding: 10px;
+        width: 90%;
+        margin-right: 0.5%;
+      }
+      form button {
+        width: 9%;
+        background: #8860d0;
+        border: none;
+        padding: 10px;
+      }
+      #messages {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        overflow-y: scroll;
+        height: 89vh;
+        background-color: #84ceeb;
+      }
+
+      #messages li {
+        padding: 5px 10px;
+      }
+
+      #messages li:first-child {
+        margin-top: auto;
+      }
+
+      #messages li:nth-child(odd) {
+        background: #eee;
+      }
+
+      #users {
+        list-style-type: none;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        overflow-y: scroll;
+        height: 89vh;
+        background-color: #84ceeb;
+        text-align: center;
+      }
+      #users {
+        padding: 5px 10px;
+      }
+
+      #users li:nth-child(odd) {
+        background: #eee;
+      }
+      #users {
+        margin-bottom: 40px;
+      }
+      #username {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        background: #c1c8e4;
+      }
+      #onlineUsers {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        background: #c1c8e4;
+      }
+      .container-fluid {
+        background-color: #5ab9ea;
+      }
+      #row {
+        height: 100%;
+      }
+    </style>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-8">
+          <h3 id="username"></h3>
+          <ul id="messages"></ul>
+        </div>
+        <div class="col-sm-4">
+          <h3 id="onlineUsers">Online Users</h3>
+          <ul id="users"></ul>
+        </div>
+      </div>
+      <div class="row">
+        <form action="">
+          <input id="m" autocomplete="off" /><button class="btn-primary">
+            Send
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      $(function() {
+        var socket = io();
+
+        if (
+          document.cookie
+            .split(";")
+            .filter(item => item.trim().startsWith("name=")).length
+        ) {
+          var cookieValue = document.cookie.replace(
+            /(?:(?:^|.*;\s*)name\s*\=\s*([^;]*).*$)|^.*$/,
+            "$1"
+          );
+
+          socket.emit("existing users", cookieValue);
+        } else {
+          socket.emit("new users");
+        }
+
+        socket.emit("get message");
+
+        $("form").submit(function() {
+          socket.emit("send message", $("#m").val());
+          $("#m").val("");
+          return false;
+        });
+
+        socket.on("new message", function(object) {
+          msg =
+            object.time + object.name.fontcolor(object.color) + object.message;
+
+          if (object.strong == false) {
+            $("#messages").append($("<li>").html(msg));
+          } else {
+            $("#messages").append($("<li>").append($("<strong>").html(msg)));
+          }
+
+          $("#messages").scrollTop($("#messages")[0].scrollHeight);
+        });
+
+        socket.on("get message", function(object) {
+          $("#messages").empty();
+
+          for (i = 0; i < object.length; i++) {
+            msg =
+              object[i].time +
+              object[i].name.fontcolor(object[i].color) +
+              object[i].message;
+
+            if (
+              document.cookie.replace(
+                /(?:(?:^|.*;\s*)name\s*\=\s*([^;]*).*$)|^.*$/,
+                "$1"
+              ) == object[i].name
+            ) {
+              $("#messages").append($("<li>").append($("<strong>").html(msg)));
+            } else {
+              $("#messages").append($("<li>").html(msg));
+            }
+          }
+
+          $("#messages").scrollTop($("#messages")[0].scrollHeight);
+        });
+
+        socket.on("get users", function(data) {
+          $("#users").empty();
+          for (i = 0; i < data.length; i++) {
+            $("#users").append($("<li>").text(data[i]));
+          }
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on("username", function(name) {
+          $("#username").text("You are " + name + ".");
+          document.cookie = "name=" + name;
+        });
+
+        //error check sockets
+        socket.on("name taken", function(data) {
+          msg = "The name " + data.old + " is taken. Your name is " + data.new;
+          $("#messages").append($("<li>").append($("<strong>").html(msg)));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on("invalid command", function(msg) {
+          msg = msg + " is a non-existant slash command.";
+          $("#messages").append($("<li>").append($("<strong>").html(msg)));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+
+        socket.on("invalid color", function(color) {
+          msg = color + " is not a color represented in hex color(RRGGBB)";
+          $("#messages").append($("<li>").append($("<strong>").html(msg)));
+          window.scrollTo(0, document.body.scrollHeight);
+        });
+      });
+    </script>
+  </body>
+</html>
