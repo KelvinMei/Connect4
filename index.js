@@ -5,6 +5,7 @@ var port = process.env.PORT || 3000;
 
 var connections = [];
 var users = [];
+var rooms = [];
 
 app.get("/", function (req, res) {
   res.sendFile(__dirname + "/index.html");
@@ -15,10 +16,20 @@ io.on("connection", function (socket) {
   //connections
   console.log("number of connections: " + connections.length);
 
+  //join lobby
+  do {
+    var roomId = Math.floor(Math.random() * 100);
+  } while (rooms.includes(roomId));
+
+  socket.join(roomId);
+  rooms.push(roomId);
+  console.log(rooms);
+  io.to(roomId).emit("roomId", roomId);
+
   //disconnect
   socket.on("disconnect", function (data) {
     users.splice(users.indexOf(socket.username), 1);
-
+    rooms.splice(rooms.indexOf(roomId), 1);
     connections.splice(connections.indexOf(socket.id), 1);
 
     console.log("number of connections: " + connections.length);
@@ -62,6 +73,13 @@ io.on("connection", function (socket) {
       users.push(socket.username);
       io.sockets.connected[socket.id].emit("username", socket.username);
     }
+  });
+
+  socket.on("code lobby", function (id) {
+    socket.leave(roomId);
+    rooms.splice(rooms.indexOf(roomId), 1);
+    socket.join(id);
+    io.to(id).emit("start game");
   });
 
   function randomUsername() {

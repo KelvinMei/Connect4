@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Connect 4</title>
+    <style>
+        header {
+            text-align: center;
+        }
+
+        #info {
+            text-align: center;
+            border: 3px solid black;
+            background-color: grey;
+        }
+
+        #existing {
+            text-align: center;
+            border: 3px solid black;
+            background-color: grey;
+        }
+
+        #randomBox {
+            text-align: center;
+            border: 3px solid black;
+            background-color: grey;
+        }
+
+        table {
+            margin-left: auto;
+            margin-right: auto;
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        #error {
+            color: red;
+        }
+
+        #name {
+            color: blue;
+            text-align: center;
+        }
+
+        #code {
+            color: blue;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <h1 id="Title">Connect 4</h1>
+        <p id="welcome">We created a name for you:</p>
+        <p id="error"></p>
+        <input id="name"></input>
+        <p>You can edit your name.</p>
+        <!--<h1 id="username"></h1> -->
+    </header>
+
+    <table>
+        <tr>
+            <td id="info" rowspan="2">
+                <p>To <b>start a new game</b>, give this code to your opponent:</p>
+                <div id="code"></div>
+                <p>Tell your opponent to visit this site and enter the code on the right.</p>
+            </td>
+            <td id="existing">
+                <p>to <b>join an existing game</b>, enter someone's game code:</p>
+                <input id="room"></input>
+                <button id="start">Start</button>
+            </td>
+        </tr>
+        <tr>
+            <td id="randomBox">
+                <p>
+                    to start a <b>random game</b>, click below:
+                </p>
+                <button id="random">Random</button>
+            </td>
+        </tr>
+    </table>
+
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(function () {
+            var socket = io();
+            var cookieName;
+
+
+
+
+            if (
+                document.cookie
+                    .split(";")
+                    .filter(item => item.trim().startsWith("name=")).length
+            ) {
+                cookieName = document.cookie.replace(
+                    /(?:(?:^|.*;\s*)name\s*\=\s*([^;]*).*$)|^.*$/,
+                    "$1"
+                );
+
+                $("#welcome").text("Welcome back");
+                socket.emit("existing users", cookieName);
+            } else {
+                socket.emit("new users");
+            }
+
+            //set lobby number
+
+
+            $("#start").click(function () {
+                if (cookieName != $("#name").val()) {
+                    socket.emit("change username", { old: cookieName, new: $("#name").val() });
+                }
+
+                //code lobby
+                socket.emit("code lobby", $("#room").val());
+
+            });
+
+            $("#random").click(function () {
+                if (cookieName != $("#name").val()) {
+                    socket.emit("change username", { old: cookieName, new: $("#name").val() });
+                }
+                //random lobby
+
+            });
+
+            socket.on("username", function (name) {
+                $("#error").text("");
+                $("#name").val(name);
+                document.cookie = "name=" + name;
+                cookieName = name;
+            });
+
+            socket.on("name taken", function (data) {
+                msg = "The name " + data.new + " is taken. Your name is " + data.old;
+                $("#error").text(msg);
+                $("#name").val(data.old);
+            });
+
+            socket.on("roomId", function (id) {
+                $("#code").text(id);
+            });
+
+            socket.on("start game", function () {
+                //href 
+                window.location.href = "http://localhost:3000/game.html";
+            });
+
+        });
+    </script>
+</body>
+
+</html>

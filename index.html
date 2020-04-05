@@ -34,6 +34,9 @@
         color: blue;
         text-align: center;
       }
+      #code{
+        color: blue;
+      }
     </style>
     <link
       rel="stylesheet"
@@ -84,6 +87,9 @@
         var socket = io();
         var cookieName;
 
+
+
+
         if (
           document.cookie
             .split(";")
@@ -100,11 +106,16 @@
           socket.emit("new users");
         }
 
+        //set lobby number
+        
+
         $("#start").click(function() {
           if(cookieName != $("#name").val()){
             socket.emit("change username", { old: cookieName, new: $("#name").val() });
           }
+
           //code lobby
+          socket.emit("code lobby", $("#room").val() );
 
         });
 
@@ -124,10 +135,19 @@
         });
 
         socket.on("name taken", function (data) {
-
           msg = "The name " + data.new + " is taken. Your name is " + data.old;
           $("#error").text(msg);
           $("#name").val(data.old);
+        });
+
+        socket.on("roomId", function (id) {
+          $("#code").text(id);
+        });
+
+        socket.on("start game", function () {
+          //href 
+          console.log(window.location.href);
+          window.location.href = "http://localhost:3000/game.html";
         });
 
       });
