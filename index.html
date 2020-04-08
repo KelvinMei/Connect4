@@ -48,7 +48,7 @@
   </head>
   <body>
 
-    <header>
+    <header id="frontheader">
       <h1 id="Title">Connect 4</h1>
       <p id="welcome">We created a name for you:</p>
       <p id="error"></p>
@@ -57,7 +57,7 @@
       <!--<h1 id="username"></h1> -->
     </header>
 
-    <table>
+    <table id="frontpage">
       <tr>
         <td id="info" rowspan="2">
           <p>To <b>start a new game</b>, give this code to your opponent:</p>
@@ -124,6 +124,8 @@
             socket.emit("change username", { old: cookieName, new: $("#name").val() });
           }
           //random lobby
+          socket.emit("code lobby", -1);
+
 
         });
 
@@ -146,8 +148,10 @@
 
         socket.on("start game", function () {
           //href 
-          console.log(window.location.href);
-          window.location.href = "http://localhost:3000/game.html";
+          $("#frontpage").hide();
+          $("#frontheader").hide();
+
+          
         });
 
       });

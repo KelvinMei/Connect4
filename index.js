@@ -76,11 +76,35 @@ io.on("connection", function (socket) {
   });
 
   socket.on("code lobby", function (id) {
-    socket.leave(roomId);
-    rooms.splice(rooms.indexOf(roomId), 1);
-    socket.join(id);
-    io.to(id).emit("start game");
+    if (io.sockets.adapter.rooms[id] != undefined) {
+      //code lobby
+      console.log("code lobby");
+      socket.leave(roomId);
+      rooms.splice(rooms.indexOf(roomId), 1);
+      socket.join(id);
+      playerLimit(id);
+    } else if (id == -1 && rooms.length > 1) {
+      //random lobby
+      console.log("random lobby");
+      socket.leave(roomId);
+      rooms.splice(rooms.indexOf(roomId), 1);
+      socket.join(rooms[0]);
+      playerLimit(rooms[0]);
+    } else {
+      console.log("error1");
+      //no player in lobby to match make
+    }
   });
+
+  function playerLimit(id) {
+    if (io.sockets.adapter.rooms[id].length == 2) {
+      rooms.splice(rooms.indexOf(id), 1);
+      io.to(id).emit("start game");
+    } else {
+      console.log("error2");
+      //must have 2 players in lobby
+    }
+  }
 
   function randomUsername() {
     let parts = [];
