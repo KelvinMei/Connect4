@@ -76,7 +76,7 @@ io.on("connection", function (socket) {
   });
 
   socket.on("code lobby", function (id) {
-    if (io.sockets.adapter.rooms[id] != undefined) {
+    if (io.sockets.adapter.rooms[id] != undefined && id != roomId) {
       //code lobby
       console.log("code lobby");
       socket.leave(roomId);
@@ -91,8 +91,7 @@ io.on("connection", function (socket) {
       socket.join(rooms[0]);
       playerLimit(rooms[0]);
     } else {
-      console.log("error1");
-      //no player in lobby to match make
+      io.sockets.connected[socket.id].emit("no players");
     }
   });
 
@@ -101,7 +100,7 @@ io.on("connection", function (socket) {
       rooms.splice(rooms.indexOf(id), 1);
       io.to(id).emit("start game");
     } else {
-      console.log("error2");
+      io.sockets.connected[socket.id].emit("no 2 players");
       //must have 2 players in lobby
     }
   }

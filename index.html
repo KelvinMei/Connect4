@@ -30,6 +30,9 @@
       #error {
         color: red;
       }
+      #error1 {
+        color: red;
+      }
       #name {
         color: blue;
         text-align: center;
@@ -54,7 +57,7 @@
       <p id="error"></p>
       <input id="name" ></input>
       <p>You can edit your name.</p>
-      <!--<h1 id="username"></h1> -->
+      <p id="error1"></p>
     </header>
 
     <table id="frontpage">
@@ -131,6 +134,7 @@
 
         socket.on("username", function(name) {
           $("#error").text("");
+          $("#error1").text("");
           $("#name").val(name);
           document.cookie = "name=" + name;
           cookieName = name;
@@ -140,6 +144,14 @@
           msg = "The name " + data.new + " is taken. Your name is " + data.old;
           $("#error").text(msg);
           $("#name").val(data.old);
+        });
+
+        socket.on("no players", function () {
+          $("#error1").text("no player in the lobby for match making.");
+        });
+
+        socket.on("no 2 players", function () {
+          $("#error1").text("Must have 2 players in lobby for match making.");
         });
 
         socket.on("roomId", function (id) {
