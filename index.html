@@ -40,6 +40,15 @@
       #code{
         color: blue;
       }
+      #gamepage{
+        display: none;
+      }
+      #intro{
+        text-align: center;
+      }
+      #color{
+        text-align: center;
+      }
     </style>
     <link
       rel="stylesheet"
@@ -83,15 +92,27 @@
       </tr>
     </table>
 
+    <div id="gamepage">
+      <div id="intro">
+        <span id="name2"></span>
+        <span>you are playing Connect 4</span>
+      </div>
+      <div id="turn"></div>
+      <div id="gameboard"></div>
+      <div id="color">
+        <span>Color theme:</span>
+        <button id="normalColor">Normal</button>
+        <button id="darkColor">Dark</button>
+        <button id="lightColor">Light</button>
+      </div>
+    </div>
+
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       $(function() {
         var socket = io();
         var cookieName;
-
-
-
 
         if (
           document.cookie
@@ -110,8 +131,6 @@
         }
 
         //set lobby number
-        
-
         $("#start").click(function() {
           if(cookieName != $("#name").val()){
             socket.emit("change username", { old: cookieName, new: $("#name").val() });
@@ -136,6 +155,7 @@
           $("#error").text("");
           $("#error1").text("");
           $("#name").val(name);
+          $("#name2").text(name+",");
           document.cookie = "name=" + name;
           cookieName = name;
         });
@@ -163,7 +183,7 @@
           $("#frontpage").hide();
           $("#frontheader").hide();
 
-          
+          $("#gamepage").show();
         });
 
       });
