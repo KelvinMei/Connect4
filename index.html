@@ -70,14 +70,16 @@
         margin-bottom: 6px;
       }
       .grid-button {
-        background-color: rgba(255, 255, 255, 0.8);
-        border: 1px solid black;
         padding: 20px;
-        font-size: 30px;
-        text-align: center;
+        width: 100px;
+        height: 100px;
       }
       #turn{
         text-align: center;
+      }
+      .grid-button:hover {
+        border-radius: 50%;
+        background: red radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
       }
     </style>
     <link
@@ -129,57 +131,57 @@
       </div>
       <div id="turn">whos turn is it</div>
       <div id="taketurn" class="grid-container">
-        <div class="grid-button">1</div>
-        <div class="grid-button">2</div>
-        <div class="grid-button">3</div>
-        <div class="grid-button">4</div>
-        <div class="grid-button">5</div>
-        <div class="grid-button">6</div>
-        <div class="grid-button">7</div>
+        <div class="grid-button" id="1"></div>
+        <div class="grid-button" id="2"></div>
+        <div class="grid-button" id="3"></div>
+        <div class="grid-button" id="4"></div>
+        <div class="grid-button" id="5"></div>
+        <div class="grid-button" id="6"></div>
+        <div class="grid-button" id="7"></div>
       </div>
       <div id="gameboard" class="grid-container">
-        <div class="grid-item" id="61">61</div>
-        <div class="grid-item" id="62">62</div>
-        <div class="grid-item" id="63">63</div>
-        <div class="grid-item" id="64">64</div>
-        <div class="grid-item" id="65">65</div>
-        <div class="grid-item" id="66">66</div>
-        <div class="grid-item" id="67">67</div>
-        <div class="grid-item" id="51">51</div>
-        <div class="grid-item" id="52">52</div>
-        <div class="grid-item" id="53">53</div>
-        <div class="grid-item" id="54">54</div>
-        <div class="grid-item" id="55">55</div>
-        <div class="grid-item" id="56">56</div>
-        <div class="grid-item" id="57">57</div>
-        <div class="grid-item" id="41">41</div>
-        <div class="grid-item" id="42">42</div>
-        <div class="grid-item" id="43">43</div>
-        <div class="grid-item" id="44">44</div>
-        <div class="grid-item" id="45">45</div>
-        <div class="grid-item" id="46">46</div>
-        <div class="grid-item" id="47">47</div>
-        <div class="grid-item" id="31">31</div>
-        <div class="grid-item" id="32">32</div>
-        <div class="grid-item" id="33">33</div>
-        <div class="grid-item" id="34">34</div>
-        <div class="grid-item" id="35">35</div>
-        <div class="grid-item" id="36">36</div>
-        <div class="grid-item" id="37">37</div>
-        <div class="grid-item" id="21">21</div>
-        <div class="grid-item" id="22">22</div>
-        <div class="grid-item" id="23">23</div>
-        <div class="grid-item" id="24">24</div>
-        <div class="grid-item" id="25">25</div>
-        <div class="grid-item" id="26">26</div>
-        <div class="grid-item" id="27">27</div>
-        <div class="grid-item" id="11">11</div>
-        <div class="grid-item" id="12">12</div>
-        <div class="grid-item" id="13">13</div>
-        <div class="grid-item" id="14">14</div>
-        <div class="grid-item" id="15">15</div>
-        <div class="grid-item" id="16">16</div>
-        <div class="grid-item" id="17">17</div>
+        <div class="grid-item" id="61"></div>
+        <div class="grid-item" id="62"></div>
+        <div class="grid-item" id="63"></div>
+        <div class="grid-item" id="64"></div>
+        <div class="grid-item" id="65"></div>
+        <div class="grid-item" id="66"></div>
+        <div class="grid-item" id="67"></div>
+        <div class="grid-item" id="51"></div>
+        <div class="grid-item" id="52"></div>
+        <div class="grid-item" id="53"></div>
+        <div class="grid-item" id="54"></div>
+        <div class="grid-item" id="55"></div>
+        <div class="grid-item" id="56"></div>
+        <div class="grid-item" id="57"></div>
+        <div class="grid-item" id="41"></div>
+        <div class="grid-item" id="42"></div>
+        <div class="grid-item" id="43"></div>
+        <div class="grid-item" id="44"></div>
+        <div class="grid-item" id="45"></div>
+        <div class="grid-item" id="46"></div>
+        <div class="grid-item" id="47"></div>
+        <div class="grid-item" id="31"></div>
+        <div class="grid-item" id="32"></div>
+        <div class="grid-item" id="33"></div>
+        <div class="grid-item" id="34"></div>
+        <div class="grid-item" id="35"></div>
+        <div class="grid-item" id="36"></div>
+        <div class="grid-item" id="37"></div>
+        <div class="grid-item" id="21"></div>
+        <div class="grid-item" id="22"></div>
+        <div class="grid-item" id="23"></div>
+        <div class="grid-item" id="24"></div>
+        <div class="grid-item" id="25"></div>
+        <div class="grid-item" id="26"></div>
+        <div class="grid-item" id="27"></div>
+        <div class="grid-item" id="11"></div>
+        <div class="grid-item" id="12"></div>
+        <div class="grid-item" id="13"></div>
+        <div class="grid-item" id="14"></div>
+        <div class="grid-item" id="15"></div>
+        <div class="grid-item" id="16"></div>
+        <div class="grid-item" id="17"></div>
       </div>
       <div id="color">
         <span>Color theme:</span>
@@ -229,8 +231,34 @@
           }
           //random lobby
           socket.emit("code lobby", -1);
+        });
 
+        $("#1").click(function(){
+          console.log("work1");
+        });
 
+        $("#2").click(function () {
+          console.log("work2");
+        });
+
+        $("#3").click(function () {
+          console.log("work3");
+        });
+
+        $("#4").click(function () {
+          console.log("work4");
+        });
+
+        $("#5").click(function () {
+          console.log("work5");
+        });
+
+        $("#6").click(function () {
+          console.log("work6");
+        });
+
+        $("#7").click(function () {
+          console.log("work7");
         });
 
         socket.on("username", function(name) {
@@ -267,7 +295,6 @@
 
           $("#gamepage").show();
         });
-
       });
     </script>
   </body>
