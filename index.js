@@ -98,7 +98,19 @@ io.on("connection", function (socket) {
   function playerLimit(id) {
     if (io.sockets.adapter.rooms[id].length == 2) {
       rooms.splice(rooms.indexOf(id), 1);
-      io.to(id).emit("start game");
+
+      io.in(id).clients((error, clients) => {
+        if (error) throw error;
+
+        var first = clients[Math.floor(Math.random() * clients.length)];
+        var second = clients.filter((client) => client != first);
+        console.log(first);
+        console.log(second[0]);
+
+        io.to(id).emit("start game");
+        io.sockets.connected[first].emit("my turn");
+        io.sockets.connected[second[0]].emit("wait for turn");
+      });
     } else {
       io.sockets.connected[socket.id].emit("no 2 players");
       //must have 2 players in lobby

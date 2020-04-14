@@ -233,33 +233,82 @@
           socket.emit("code lobby", -1);
         });
 
-        $("#1").click(function(){
-          console.log("work1");
+
+        $('#1').click(function() {
+          if($('#1').attr('disabled') == "disabled"){
+            return false;
+          }
+          else{
+            takeMyTurn(1);
+          }
         });
 
-        $("#2").click(function () {
-          console.log("work2");
+        $('#2').click(function () {
+          if ($('#2').attr('disabled') == "disabled") {
+            return false;
+          }
+          else {
+            takeMyTurn(2);
+          }
         });
 
-        $("#3").click(function () {
-          console.log("work3");
+        $('#3').click(function () {
+          if ($('#3').attr('disabled') == "disabled") {
+            return false;
+          }
+          else {
+            takeMyTurn(3);
+          }
         });
 
-        $("#4").click(function () {
-          console.log("work4");
+        $('#4').click(function () {
+          if ($('#4').attr('disabled') == "disabled") {
+            return false;
+          }
+          else {
+            takeMyTurn(4);
+          }
         });
 
-        $("#5").click(function () {
-          console.log("work5");
+        $('#4').click(function () {
+          if ($('#4').attr('disabled') == "disabled") {
+            return false;
+          }
+          else {
+            takeMyTurn(4);
+          }
         });
 
-        $("#6").click(function () {
-          console.log("work6");
+        $('#5').click(function () {
+          if ($('#5').attr('disabled') == "disabled") {
+            return false;
+          }
+          else {
+            takeMyTurn(5);
+          }
         });
 
-        $("#7").click(function () {
-          console.log("work7");
+        $('#6').click(function () {
+          if ($('#6').attr('disabled') == "disabled") {
+            return false;
+          }
+          else {
+            takeMyTurn(6);
+          }
         });
+
+        $('#7').click(function () {
+          if ($('#7').attr('disabled') == "disabled") {
+            return false;
+          }
+          else {
+            takeMyTurn(7);
+          }
+        });
+
+        function takeMyTurn(number){
+          console.log(number);
+        }
 
         socket.on("username", function(name) {
           $("#error").text("");
@@ -288,13 +337,34 @@
           $("#code").text(id);
         });
 
-        socket.on("start game", function () {
-          //href 
+        socket.on("start game", function () { 
           $("#frontpage").hide();
           $("#frontheader").hide();
-
           $("#gamepage").show();
         });
+
+        socket.on("my turn", function () {
+          $("#turn").text("My turn");
+          $('#1').removeAttr('disabled');
+          $('#2').removeAttr('disabled');
+          $('#3').removeAttr('disabled');
+          $('#4').removeAttr('disabled');
+          $('#5').removeAttr('disabled');
+          $('#6').removeAttr('disabled');
+          $('#7').removeAttr('disabled');
+        });
+
+        socket.on("wait for turn", function () {
+          $("#turn").text("Not my turn");
+          $('#1').attr('disabled', 'disabled');
+          $('#2').attr('disabled', 'disabled');
+          $('#3').attr('disabled', 'disabled');
+          $('#4').attr('disabled', 'disabled');
+          $('#5').attr('disabled', 'disabled');
+          $('#6').attr('disabled', 'disabled');
+          $('#7').attr('disabled', 'disabled');
+        });
+
       });
     </script>
   </body>
