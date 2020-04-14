@@ -105,6 +105,9 @@ io.on("connection", function (socket) {
         var first = clients[Math.floor(Math.random() * clients.length)];
         var second = clients.filter((client) => client != first);
 
+        io.sockets.connected[first].gameboard = [6][7];
+        io.sockets.connected[second[0]].gameboard = [6][7];
+
         io.to(id).emit("start game");
         io.sockets.connected[first].emit(
           "my turn",
