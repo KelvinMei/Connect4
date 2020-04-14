@@ -105,10 +105,15 @@ io.on("connection", function (socket) {
         var first = clients[Math.floor(Math.random() * clients.length)];
         var second = clients.filter((client) => client != first);
 
-        io.sockets.connected[first].gameboard = [6][7];
-        io.sockets.connected[second[0]].gameboard = [6][7];
+        io.sockets.connected[first].gameboard = new Array(6);
+        io.sockets.connected[second[0]].gameboard = new Array(6);
+        for (i = 0; i < 6; i++) {
+          io.sockets.connected[first].gameboard[i] = new Array(7);
+          io.sockets.connected[second[0]].gameboard[i] = new Array(7);
+        }
 
         io.to(id).emit("start game");
+
         io.sockets.connected[first].emit(
           "my turn",
           io.sockets.connected[first].username
@@ -123,6 +128,41 @@ io.on("connection", function (socket) {
       //must have 2 players in lobby
     }
   }
+
+  socket.on("place", function (data) {
+    let rooms = Object.keys(socket.rooms).filter(function (item) {
+      return item !== socket.id;
+    });
+
+    io.in(rooms[0]).clients((error, clients) => {
+      if (error) throw error;
+      var now = clients.filter((client) => client == socket.id);
+      var next = clients.filter((client) => client != socket.id);
+
+      for (i = 0; i < 6; i++) {
+        if (
+          io.sockets.connected[now[0]].gameboard[i][data.column] == undefined &&
+          io.sockets.connected[next[0]].gameboard[i][data.column] == undefined
+        ) {
+          socket.gameboard[i][data.column] = data.color;
+          io.sockets.connected[next[0]].gameboard[i][data.column] = data.color;
+          break;
+        }
+      }
+
+      io.to(rooms[0]).emit("populateGameBoard", socket.gameboard);
+      /*
+      io.sockets.connected[first].emit(
+        "my turn",
+        io.sockets.connected[first].username
+      );
+      io.sockets.connected[second[0]].emit(
+        "wait for turn",
+        io.sockets.connected[first].username
+      );
+      */
+    });
+  });
 
   function randomUsername() {
     let parts = [];

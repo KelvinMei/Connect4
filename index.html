@@ -79,7 +79,8 @@
       }
       .grid-button:hover {
         border-radius: 50%;
-        background: red radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+        background: radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+        background-color: red;
       }
     </style>
     <link
@@ -298,7 +299,8 @@
         });
 
         function takeMyTurn(number){
-          console.log(number);
+          var color = window.getComputedStyle(document.getElementById(number), null).getPropertyValue("background-color");
+          socket.emit("place", {column: number, color: color});
         }
 
         socket.on("username", function(name) {
@@ -332,6 +334,16 @@
           $("#frontpage").hide();
           $("#frontheader").hide();
           $("#gamepage").show();
+        });
+
+        socket.on("populateGameBoard", function (array) {
+          for(i = 0; i < 6; i++){
+            for(j = 0; j < 7; j++){
+              if(array[i][j] == "rgb(255, 0, 0)"){
+                $("#"+i+j).css("background", "rgb(255, 0, 0)");
+              }
+            }
+          }
         });
 
         socket.on("my turn", function (firstname) {
