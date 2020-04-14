@@ -343,8 +343,8 @@
           $("#gamepage").show();
         });
 
-        socket.on("my turn", function () {
-          $("#turn").text("My turn");
+        socket.on("my turn", function (firstname) {
+          $("#turn").text(firstname + ", it is your turn:");
           $('#1').removeAttr('disabled');
           $('#2').removeAttr('disabled');
           $('#3').removeAttr('disabled');
@@ -354,8 +354,8 @@
           $('#7').removeAttr('disabled');
         });
 
-        socket.on("wait for turn", function () {
-          $("#turn").text("Not my turn");
+        socket.on("wait for turn", function (firstname) {
+          $("#turn").text("Please wait for "+ firstname +"'s turn.");
           $('#1').attr('disabled', 'disabled');
           $('#2').attr('disabled', 'disabled');
           $('#3').attr('disabled', 'disabled');
@@ -363,6 +363,49 @@
           $('#5').attr('disabled', 'disabled');
           $('#6').attr('disabled', 'disabled');
           $('#7').attr('disabled', 'disabled');
+
+
+          $("#1").hover(function () {
+            $(this).css("background", "gray");
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#2").hover(function () {
+            $(this).css("background", "gray");
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#3").hover(function () {
+            $(this).css("background", "gray");
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#4").hover(function () {
+            $(this).css("background", "gray");
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#5").hover(function () {
+            $(this).css("background", "gray");
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#6").hover(function () {
+            $(this).css("background", "gray");
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#7").hover(function () {
+            $(this).css("background", "gray");
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
         });
 
       });

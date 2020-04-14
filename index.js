@@ -104,12 +104,16 @@ io.on("connection", function (socket) {
 
         var first = clients[Math.floor(Math.random() * clients.length)];
         var second = clients.filter((client) => client != first);
-        console.log(first);
-        console.log(second[0]);
 
         io.to(id).emit("start game");
-        io.sockets.connected[first].emit("my turn");
-        io.sockets.connected[second[0]].emit("wait for turn");
+        io.sockets.connected[first].emit(
+          "my turn",
+          io.sockets.connected[first].username
+        );
+        io.sockets.connected[second[0]].emit(
+          "wait for turn",
+          io.sockets.connected[first].username
+        );
       });
     } else {
       io.sockets.connected[socket.id].emit("no 2 players");
