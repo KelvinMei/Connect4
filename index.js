@@ -114,10 +114,10 @@ io.on("connection", function (socket) {
 
         io.to(id).emit("start game");
 
-        io.sockets.connected[first].emit(
-          "my turn",
-          io.sockets.connected[first].username
-        );
+        io.sockets.connected[first].emit("my turn", {
+          name: io.sockets.connected[first].username,
+          color: "rgb(255, 0, 0)",
+        });
         io.sockets.connected[second[0]].emit(
           "wait for turn",
           io.sockets.connected[first].username
@@ -150,17 +150,23 @@ io.on("connection", function (socket) {
         }
       }
 
-      io.to(rooms[0]).emit("populateGameBoard", socket.gameboard);
-      /*
-      io.sockets.connected[first].emit(
-        "my turn",
-        io.sockets.connected[first].username
-      );
-      io.sockets.connected[second[0]].emit(
+      var nextColor =
+        data.color == "rgb(255, 0, 0)" ? "rgb(0, 0, 255)" : "rgb(255, 0, 0)";
+
+      io.to(rooms[0]).emit("populateGameBoard", {
+        array: socket.gameboard,
+        color: data.color,
+      });
+
+      io.sockets.connected[next[0]].emit("my turn", {
+        name: io.sockets.connected[next[0]].username,
+        color: nextColor,
+      });
+
+      io.sockets.connected[now[0]].emit(
         "wait for turn",
-        io.sockets.connected[first].username
+        io.sockets.connected[next[0]].username
       );
-      */
     });
   });
 

@@ -80,7 +80,7 @@
       .grid-button:hover {
         border-radius: 50%;
         background: radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
-        background-color: red;
+        background-color: rgb(255, 0, 0);
       }
     </style>
     <link
@@ -336,18 +336,20 @@
           $("#gamepage").show();
         });
 
-        socket.on("populateGameBoard", function (array) {
+        socket.on("populateGameBoard", function (data) {
           for(i = 0; i < 6; i++){
             for(j = 0; j < 7; j++){
-              if(array[i][j] == "rgb(255, 0, 0)"){
+              if(data.array[i][j] == "rgb(255, 0, 0)"){
                 $("#"+i+j).css("background", "rgb(255, 0, 0)");
+              } else if(data.array[i][j] == "rgb(0, 0, 255)"){
+                $("#" + i + j).css("background", "rgb(0, 0, 255)");
               }
             }
           }
         });
 
-        socket.on("my turn", function (firstname) {
-          $("#turn").text(firstname + ", it is your turn:");
+        socket.on("my turn", function (data) {
+          $("#turn").text(data.name + ", it is your turn:");
           $('#0').removeAttr('disabled');
           $('#1').removeAttr('disabled');
           $('#2').removeAttr('disabled');
@@ -355,6 +357,50 @@
           $('#4').removeAttr('disabled');
           $('#5').removeAttr('disabled');
           $('#6').removeAttr('disabled');
+
+          $("#0").hover(function () {
+            $(this).css("background", data.color);
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#1").hover(function () {
+            $(this).css("background", data.color);
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#2").hover(function () {
+            $(this).css("background", data.color);
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#3").hover(function () {
+            $(this).css("background", data.color);
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#4").hover(function () {
+            $(this).css("background", data.color);
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#5").hover(function () {
+            $(this).css("background", data.color);
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+          $("#6").hover(function () {
+            $(this).css("background", data.color);
+          }, function () {
+            $(this).css("background", "#2196F3");
+          });
+
+
         });
 
         socket.on("wait for turn", function (firstname) {
@@ -409,6 +455,7 @@
           }, function () {
             $(this).css("background", "#2196F3");
           });
+
         });
 
       });
