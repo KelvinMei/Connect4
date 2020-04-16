@@ -158,17 +158,118 @@ io.on("connection", function (socket) {
         color: data.color,
       });
 
-      io.sockets.connected[next[0]].emit("my turn", {
-        name: io.sockets.connected[next[0]].username,
-        color: nextColor,
-      });
+      if (checkWin(socket.gameboard) == true) {
+        //win
+        console.log("win");
+      } else {
+        //keep playing
+        io.sockets.connected[next[0]].emit("my turn", {
+          name: io.sockets.connected[next[0]].username,
+          color: nextColor,
+        });
 
-      io.sockets.connected[now[0]].emit(
-        "wait for turn",
-        io.sockets.connected[next[0]].username
-      );
+        io.sockets.connected[now[0]].emit(
+          "wait for turn",
+          io.sockets.connected[next[0]].username
+        );
+      }
     });
   });
+
+  function checkWin(board) {
+    for (i = 0; i < 6; i++) {
+      for (j = 0; j < 7; j++) {
+        if (board[i][j] == undefined) {
+          continue;
+        }
+
+        if (checkPiece(board, i, j) == true) {
+          return true;
+        }
+      }
+    }
+  }
+
+  function checkPiece(board, up, right) {
+    var color = board[up][right];
+    var count = 0;
+    var i = 0;
+    //horizontal
+    console.log("Horizontal check");
+    for (i = 0; i < 4; i++) {
+      if (board[up][right + i] == undefined) {
+        break;
+      }
+
+      if (board[up][right + i] == color) {
+        count++;
+        if (count == 4) {
+          return true;
+        }
+      } else {
+        break;
+      }
+    }
+
+    count = 0;
+    i = 0;
+    //vertical
+    console.log("vertical check");
+    for (i = 0; i < 4; i++) {
+      if (board[up + i][right] == undefined) {
+        break;
+      }
+
+      if (board[up + i][right] == color) {
+        count++;
+        if (count == 4) {
+          return true;
+        }
+      } else {
+        break;
+      }
+    }
+
+    count = 0;
+    i = 0;
+    //diagonal up right
+    console.log("diagonal up right");
+    for (i = 0; i < 4; i++) {
+      if (board[up + i][right + i] == undefined) {
+        break;
+      }
+
+      if (board[up + i][right + i] == color) {
+        count++;
+        if (count == 4) {
+          return true;
+        }
+      } else {
+        break;
+      }
+    }
+
+    count = 0;
+    i = 0;
+    //diagonal up left
+    console.log("diagonal up left");
+    for (i = 0; i < 4; i++) {
+      if (board[up + i][right - i] == undefined) {
+        break;
+      }
+      if (board[up + i][right - i] == color) {
+        count++;
+        if (count == 4) {
+          return true;
+        }
+      } else {
+        break;
+      }
+    }
+
+    console.log("done");
+    return false;
+  }
 
   function randomUsername() {
     let parts = [];
