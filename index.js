@@ -160,7 +160,7 @@ io.on("connection", function (socket) {
 
       if (checkWin(socket.gameboard) == true) {
         //win
-        console.log("win");
+        io.to(rooms[0]).emit("win game", socket.username);
       } else {
         //keep playing
         io.sockets.connected[next[0]].emit("my turn", {

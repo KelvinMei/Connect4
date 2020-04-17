@@ -132,59 +132,58 @@
       </div>
       <div id="turn">whos turn is it</div>
       <div id="taketurn" class="grid-container">
-        <div class="grid-button" id="0">0</div>
-        <div class="grid-button" id="1">1</div>
-        <div class="grid-button" id="2">2</div>
-        <div class="grid-button" id="3">3</div>
-        <div class="grid-button" id="4">4</div>
-        <div class="grid-button" id="5">5</div>
-        <div class="grid-button" id="6">6</div>
+        <div class="grid-button" id="0"></div>
+        <div class="grid-button" id="1"></div>
+        <div class="grid-button" id="2"></div>
+        <div class="grid-button" id="3"></div>
+        <div class="grid-button" id="4"></div>
+        <div class="grid-button" id="5"></div>
+        <div class="grid-button" id="6"></div>
       </div>
       <div id="gameboard" class="grid-container">
-        <div class="grid-item" id="50">50</div>
-        <div class="grid-item" id="51">51</div>
-        <div class="grid-item" id="52">52</div>
-        <div class="grid-item" id="53">53</div>
-        <div class="grid-item" id="54">54</div>
-        <div class="grid-item" id="55">55</div>
-        <div class="grid-item" id="56">56</div>
-        <div class="grid-item" id="40">40</div>
-        <div class="grid-item" id="41">41</div>
-        <div class="grid-item" id="42">42</div>
-        <div class="grid-item" id="43">43</div>
-        <div class="grid-item" id="44">44</div>
-        <div class="grid-item" id="45">45</div>
-        <div class="grid-item" id="46">46</div>
-        <div class="grid-item" id="30">30</div>
-        <div class="grid-item" id="31">31</div>
-        <div class="grid-item" id="32">32</div>
-        <div class="grid-item" id="33">33</div>
-        <div class="grid-item" id="34">34</div>
-        <div class="grid-item" id="35">35</div>
-        <div class="grid-item" id="36">36</div>
-        <div class="grid-item" id="20">20</div>
-        <div class="grid-item" id="21">21</div>
-        <div class="grid-item" id="22">22</div>
-        <div class="grid-item" id="23">23</div>
-        <div class="grid-item" id="24">24</div>
-        <div class="grid-item" id="25">24</div>
-        <div class="grid-item" id="26">26</div>
-        <div class="grid-item" id="10">10</div>
-        <div class="grid-item" id="11">11</div>
-        <div class="grid-item" id="12">12</div>
-        <div class="grid-item" id="13">13</div>
-        <div class="grid-item" id="14">14</div>
-        <div class="grid-item" id="15">15</div>
-        <div class="grid-item" id="16">16</div>
-        <div class="grid-item" id="00">00</div>
-        <div class="grid-item" id="01">01</div>
-        <div class="grid-item" id="02">02</div>
-        <div class="grid-item" id="03">03</div>
-        <div class="grid-item" id="04">04</div>
-        <div class="grid-item" id="05">05</div>
-        <div class="grid-item" id="06">06</div>
-      </div>
-      <div id="color">
+        <div class="grid-item" id="50"></div>
+        <div class="grid-item" id="51"></div>
+        <div class="grid-item" id="52"></div>
+        <div class="grid-item" id="53"></div>
+        <div class="grid-item" id="54"></div>
+        <div class="grid-item" id="55"></div>
+        <div class="grid-item" id="56"></div>
+        <div class="grid-item" id="40"></div>
+        <div class="grid-item" id="41"></div>
+        <div class="grid-item" id="42"></div>
+        <div class="grid-item" id="43"></div>
+        <div class="grid-item" id="44"></div>
+        <div class="grid-item" id="45"></div>
+        <div class="grid-item" id="46"></div>
+        <div class="grid-item" id="30"></div>
+        <div class="grid-item" id="31"></div>
+        <div class="grid-item" id="32"></div>
+        <div class="grid-item" id="33"></div>
+        <div class="grid-item" id="34"></div>
+        <div class="grid-item" id="35"></div>
+        <div class="grid-item" id="36"></div>
+        <div class="grid-item" id="20"></div>
+        <div class="grid-item" id="21"></div>
+        <div class="grid-item" id="22"></div>
+        <div class="grid-item" id="23"></div>
+        <div class="grid-item" id="24"></div>
+        <div class="grid-item" id="25"></div>
+        <div class="grid-item" id="26"></div>
+        <div class="grid-item" id="10"></div>
+        <div class="grid-item" id="11"></div>
+        <div class="grid-item" id="12"></div>
+        <div class="grid-item" id="13"></div>
+        <div class="grid-item" id="14"></div>
+        <div class="grid-item" id="15"></div>
+        <div class="grid-item" id="16"></div>
+        <div class="grid-item" id="00"></div>
+        <div class="grid-item" id="01"></div>
+        <div class="grid-item" id="02"></div>
+        <div class="grid-item" id="03"></div>
+        <div class="grid-item" id="04"></div>
+        <div class="grid-item" id="05"></div>
+        <div class="grid-item" id="06"></div>
+      </div>      <div id="color">
         <span>Color theme:</span>
         <button id="normalColor">Normal</button>
         <button id="darkColor">Dark</button>
@@ -336,6 +335,11 @@
           $("#gamepage").show();
         });
 
+        socket.on("win game", function (name) {
+          $("#turn").text(name + " has won the Connect 4 game!");
+          disableMove();
+        });
+
         socket.on("populateGameBoard", function (data) {
           for(i = 0; i < 6; i++){
             for(j = 0; j < 7; j++){
@@ -405,6 +409,10 @@
 
         socket.on("wait for turn", function (firstname) {
           $("#turn").text("Please wait for "+ firstname +"'s turn.");
+          disableMove();
+        });
+
+        function disableMove() {
           $('#0').attr('disabled', 'disabled');
           $('#1').attr('disabled', 'disabled');
           $('#2').attr('disabled', 'disabled');
@@ -412,7 +420,6 @@
           $('#4').attr('disabled', 'disabled');
           $('#5').attr('disabled', 'disabled');
           $('#6').attr('disabled', 'disabled');
-
 
           $("#0").hover(function () {
             $(this).css("background", "gray");
@@ -455,8 +462,7 @@
           }, function () {
             $(this).css("background", "#2196F3");
           });
-
-        });
+        }
 
       });
     </script>
