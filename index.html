@@ -53,7 +53,7 @@
         display: grid;
         grid-template-columns: auto auto auto auto auto auto auto;
         grid-template-rows: auto auto auto auto auto auto;
-        background-color: #2196F3;
+        background-color: rgb(33, 150, 243);
         padding: 10px;
         border: 1px solid black;
         width: 800px;
@@ -183,11 +183,12 @@
         <div class="grid-item" id="04"></div>
         <div class="grid-item" id="05"></div>
         <div class="grid-item" id="06"></div>
-      </div>      <div id="color">
+      </div>
+      <div id="color">
         <span>Color theme:</span>
         <button id="normalColor">Normal</button>
-        <button id="darkColor">Dark</button>
-        <button id="lightColor">Light</button>
+        <button id="vibeColor">Vibe</button>
+        <button id="rainbowColor">Rainbow</button>
       </div>
     </div>
 
@@ -197,6 +198,36 @@
       $(function() {
         var socket = io();
         var cookieName;
+        var backgroundColor = "rgb(33, 150, 243)";
+        var placeColor;
+
+        if(document.cookie
+          .split(";")
+          .filter(item => item.trim().startsWith("color=")).length &&
+          document.cookie.replace(
+            /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+            "$1"
+          ) == "Vibe"
+        ){
+          backgroundColor = "rgb(199, 21, 133)";
+          $(".grid-container").css("background", backgroundColor);
+        }
+        else if (document.cookie
+          .split(";")
+          .filter(item => item.trim().startsWith("color=")).length &&
+          document.cookie.replace(
+            /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+            "$1"
+          ) == "Rainbow"
+        ){
+          backgroundColor = "rgb(238, 130, 238)";
+          $(".grid-container").css("background", backgroundColor);
+
+        } else {
+          backgroundColor = "rgb(33, 150, 243)";
+          $(".grid-container").css("background", backgroundColor);
+        }
+
 
         if (
           document.cookie
@@ -213,6 +244,114 @@
         } else {
           socket.emit("new users");
         }
+
+        $("#normalColor").click(function () {
+          document.cookie = "color=Normal";
+          backgroundColor = "rgb(33, 150, 243)";
+          $(".grid-container").css("background", backgroundColor);
+          $(".grid-button").css("background", backgroundColor);
+
+          if (placeColor == "rgb(13, 152, 186)" || placeColor == "rgb(130, 238, 238)") {
+            $(".grid-button").hover(function () {
+              $(this).css("background", "rgb(255, 0, 0)");
+            }, function () {
+              $(this).css("background", backgroundColor);
+            });
+            placeColor = "rgb(255, 0, 0)";
+
+          } else if (placeColor == "rgb(255, 174, 66)" || placeColor == "rgb(238, 238, 130)") {
+            $(".grid-button").hover(function () {
+              $(this).css("background", "rgb(255, 255, 0)");
+            }, function () {
+              $(this).css("background", backgroundColor);
+            });
+            placeColor = "rgb(255, 255, 0)";
+          }
+
+          for (i = 0; i < 6; i++) {
+            for (j = 0; j < 7; j++) {
+              var color = window.getComputedStyle(document.getElementById(""+i+j), null).getPropertyValue("background-color");
+              if (color == "rgb(13, 152, 186)" || color == "rgb(130, 238, 238)") {
+                $("#" + i + j).css("background", "rgb(255, 0, 0)");
+              } else if (color == "rgb(255, 174, 66)" || color == "rgb(238, 238, 130)") {
+                $("#" + i + j).css("background", "rgb(255, 255, 0)");
+              }
+            }
+          }
+
+        });
+
+        $("#vibeColor").click(function () {
+          document.cookie = "color=Vibe";
+          backgroundColor = "rgb(199, 21, 133)";
+          $(".grid-container").css("background", backgroundColor);
+          $(".grid-button").css("background", backgroundColor);
+
+          if(placeColor == "rgb(255, 0, 0)" || placeColor == "rgb(130, 238, 238)"){
+            $(".grid-button").hover(function () {
+              $(this).css("background", "rgb(13, 152, 186)");
+            }, function () {
+              $(this).css("background", backgroundColor);
+            });
+            placeColor = "rgb(13, 152, 186)";
+
+          } else if(placeColor == "rgb(255, 255, 0)" || placeColor == "rgb(238, 238, 130)"){
+            $(".grid-button").hover(function () {
+              $(this).css("background", "rgb(255, 174, 66)");
+            }, function () {
+              $(this).css("background", backgroundColor);
+            });
+            placeColor = "rgb(255, 174, 66)";
+          }
+
+          for (i = 0; i < 6; i++) {
+            for (j = 0; j < 7; j++) {
+              var color = window.getComputedStyle(document.getElementById(""+ i+j), null).getPropertyValue("background-color");
+              if(color == "rgb(255, 0, 0)" || color == "rgb(130, 238, 238)"){
+                $("#" + i + j).css("background", "rgb(13, 152, 186)");
+              } else if (color == "rgb(255, 255, 0)" || color == "rgb(238, 238, 130)"){
+                $("#" + i + j).css("background", "rgb(255, 174, 66)");
+              }
+            }
+          }
+
+        });
+
+        $("#rainbowColor").click(function () {
+          document.cookie = "color=Rainbow";
+          backgroundColor = "rgb(238, 130, 238)";
+          $(".grid-container").css("background", backgroundColor);
+          $(".grid-button").css("background", backgroundColor);
+
+          if (placeColor == "rgb(255, 0, 0)" || placeColor == "rgb(13, 152, 186)") {
+            $(".grid-button").hover(function () {
+              $(this).css("background", "rgb(130, 238, 238)");
+            }, function () {
+              $(this).css("background", backgroundColor);
+            });
+            placeColor = "rgb(130, 238, 238)";
+
+          } else if (placeColor == "rgb(255, 255, 0)" || placeColor == "rgb(255, 174, 66)") {
+            $(".grid-button").hover(function () {
+              $(this).css("background", "rgb(238, 238, 130)");
+            }, function () {
+              $(this).css("background", backgroundColor);
+            });
+            placeColor = "rgb(238, 238, 130)";
+          }
+
+          for (i = 0; i < 6; i++) {
+            for (j = 0; j < 7; j++) {
+              var color = window.getComputedStyle(document.getElementById("" + i + j), null).getPropertyValue("background-color");
+              if (color == "rgb(255, 0, 0)" || color == "rgb(13, 152, 186)") {
+                $("#" + i + j).css("background", "rgb(130, 238, 238)");
+              } else if (color == "rgb(255, 255, 0)" || color == "rgb(255, 174, 66)") {
+                $("#" + i + j).css("background", "rgb(238, 238, 130)");
+              }
+            }
+          }
+
+        });
 
         //set lobby number
         $("#start").click(function() {
@@ -234,71 +373,22 @@
         });
 
 
-        $('#0').click(function() {
-          if($('#0').attr('disabled') == "disabled"){
+        $(".grid-button").click(function() {
+          if($(".grid-button").attr('disabled') == "disabled"){
             return false;
           }
           else{
-            takeMyTurn(0);
-          }
-        });
-
-        $('#1').click(function () {
-          if ($('#1').attr('disabled') == "disabled") {
-            return false;
-          }
-          else {
-            takeMyTurn(1);
-          }
-        });
-
-        $('#2').click(function () {
-          if ($('#2').attr('disabled') == "disabled") {
-            return false;
-          }
-          else {
-            takeMyTurn(2);
-          }
-        });
-
-        $('#3').click(function () {
-          if ($('#3').attr('disabled') == "disabled") {
-            return false;
-          }
-          else {
-            takeMyTurn(3);
-          }
-        });
-
-        $('#4').click(function () {
-          if ($('#4').attr('disabled') == "disabled") {
-            return false;
-          }
-          else {
-            takeMyTurn(4);
-          }
-        });
-
-        $('#5').click(function () {
-          if ($('#5').attr('disabled') == "disabled") {
-            return false;
-          }
-          else {
-            takeMyTurn(5);
-          }
-        });
-
-        $('#6').click(function () {
-          if ($('#6').attr('disabled') == "disabled") {
-            return false;
-          }
-          else {
-            takeMyTurn(6);
+            takeMyTurn(this.id);
           }
         });
 
         function takeMyTurn(number){
           var color = window.getComputedStyle(document.getElementById(number), null).getPropertyValue("background-color");
+          if(color == "rgb(255, 0, 0)" || color == "rgb(13, 152, 186)" || color == "rgb(130, 238, 238)"){
+            color = "rgb(255, 0, 0)";
+          } else if(color == "rgb(255, 255, 0)" || color == "rgb(255, 174, 66)" || color == "rgb(238, 238, 130)"){
+            color = "rgb(255, 255, 0)";
+          }
           socket.emit("place", {column: number, color: color});
         }
 
@@ -344,66 +434,118 @@
           for(i = 0; i < 6; i++){
             for(j = 0; j < 7; j++){
               if(data.array[i][j] == "rgb(255, 0, 0)"){
-                $("#"+i+j).css("background", "rgb(255, 0, 0)");
-              } else if(data.array[i][j] == "rgb(0, 0, 255)"){
-                $("#" + i + j).css("background", "rgb(0, 0, 255)");
+
+                if(document.cookie
+                  .split(";")
+                  .filter(item => item.trim().startsWith("color=")).length && 
+                  document.cookie.replace(
+                    /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+                    "$1"
+                  ) == "Vibe"
+                ){
+                  $("#" + i + j).css("background", "rgb(13, 152, 186)");
+                } else if(document.cookie
+                  .split(";")
+                  .filter(item => item.trim().startsWith("color=")).length &&
+                  document.cookie.replace(
+                    /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+                    "$1"
+                  ) == "Rainbow"
+                ){
+                  $("#" + i + j).css("background", "rgb(130, 238, 238)");
+                } else {
+                  $("#" + i + j).css("background", "rgb(255, 0, 0)");
+                }
+
+
+              } else if(data.array[i][j] == "rgb(255, 255, 0)"){
+                if (document.cookie
+                  .split(";")
+                  .filter(item => item.trim().startsWith("color=")).length &&
+                  document.cookie.replace(
+                    /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+                    "$1"
+                  ) == "Vibe"
+                ) {
+                  $("#" + i + j).css("background", "rgb(255, 174, 66)");
+                } else if (document.cookie
+                  .split(";")
+                  .filter(item => item.trim().startsWith("color=")).length &&
+                  document.cookie.replace(
+                    /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+                    "$1"
+                  ) == "Rainbow"
+                ) {
+                  $("#" + i + j).css("background", "rgb(238, 238, 130)");
+                } else {
+                  $("#" + i + j).css("background", "rgb(255, 255, 0)");
+                }
+
               }
             }
           }
         });
 
         socket.on("my turn", function (data) {
+          if(data.color == "rgb(255, 0, 0)"){
+            if (document.cookie
+              .split(";")
+              .filter(item => item.trim().startsWith("color=")).length &&
+              document.cookie.replace(
+                /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+                "$1"
+              ) == "Vibe"
+            ){
+              placeColor = "rgb(13, 152, 186)";
+
+            } else if(document.cookie
+              .split(";")
+              .filter(item => item.trim().startsWith("color=")).length &&
+              document.cookie.replace(
+                /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+                "$1"
+              ) == "Rainbow"
+            ){
+              placeColor = "rgb(130, 238, 238)";
+            } else {
+              placeColor = "rgb(255, 0, 0)";
+
+            }
+          } else if(data.color == "rgb(255, 255, 0)"){
+            if (document.cookie
+              .split(";")
+              .filter(item => item.trim().startsWith("color=")).length &&
+              document.cookie.replace(
+                /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+                "$1"
+              ) == "Vibe"
+            ) {
+              placeColor = "rgb(255, 174, 66)";
+            } else if (document.cookie
+              .split(";")
+              .filter(item => item.trim().startsWith("color=")).length &&
+              document.cookie.replace(
+                /(?:(?:^|.*;\s*)color\s*\=\s*([^;]*).*$)|^.*$/,
+                "$1"
+              ) == "Rainbow"
+            ) {
+              placeColor = "rgb(238, 238, 130)";
+            } else {
+              placeColor = "rgb(255, 255, 0)";
+
+            }
+
+          }
+
+
           $("#turn").text(data.name + ", it is your turn:");
-          $('#0').removeAttr('disabled');
-          $('#1').removeAttr('disabled');
-          $('#2').removeAttr('disabled');
-          $('#3').removeAttr('disabled');
-          $('#4').removeAttr('disabled');
-          $('#5').removeAttr('disabled');
-          $('#6').removeAttr('disabled');
+          $(".grid-button").removeAttr('disabled');
 
-          $("#0").hover(function () {
-            $(this).css("background", data.color);
+          $(".grid-button").hover(function () {
+            $(this).css("background", placeColor);
           }, function () {
-            $(this).css("background", "#2196F3");
+            $(this).css("background", backgroundColor);
           });
-
-          $("#1").hover(function () {
-            $(this).css("background", data.color);
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#2").hover(function () {
-            $(this).css("background", data.color);
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#3").hover(function () {
-            $(this).css("background", data.color);
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#4").hover(function () {
-            $(this).css("background", data.color);
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#5").hover(function () {
-            $(this).css("background", data.color);
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#6").hover(function () {
-            $(this).css("background", data.color);
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
 
         });
 
@@ -413,55 +555,14 @@
         });
 
         function disableMove() {
-          $('#0').attr('disabled', 'disabled');
-          $('#1').attr('disabled', 'disabled');
-          $('#2').attr('disabled', 'disabled');
-          $('#3').attr('disabled', 'disabled');
-          $('#4').attr('disabled', 'disabled');
-          $('#5').attr('disabled', 'disabled');
-          $('#6').attr('disabled', 'disabled');
-
-          $("#0").hover(function () {
-            $(this).css("background", "gray");
+          placeColor = "gray";
+          $(".grid-button").attr('disabled', 'disabled');
+          $(".grid-button").hover(function () {
+            $(this).css("background", placeColor);
           }, function () {
-            $(this).css("background", "#2196F3");
+            $(this).css("background", backgroundColor);
           });
 
-          $("#1").hover(function () {
-            $(this).css("background", "gray");
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#2").hover(function () {
-            $(this).css("background", "gray");
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#3").hover(function () {
-            $(this).css("background", "gray");
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#4").hover(function () {
-            $(this).css("background", "gray");
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#5").hover(function () {
-            $(this).css("background", "gray");
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
-
-          $("#6").hover(function () {
-            $(this).css("background", "gray");
-          }, function () {
-            $(this).css("background", "#2196F3");
-          });
         }
 
       });
