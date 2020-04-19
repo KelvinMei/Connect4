@@ -82,6 +82,12 @@
         background: radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
         background-color: rgb(255, 0, 0);
       }
+      #name2{
+        font-weight: bold;
+      }
+      #playTitle{
+        font-weight: bold;
+      }
     </style>
     <link
       rel="stylesheet"
@@ -128,9 +134,11 @@
     <div id="gamepage">
       <div id="intro">
         <span id="name2"></span>
-        <span>you are playing Connect 4</span>
+        <span id="playTitle">you are playing Connect 4</span>
       </div>
+      <br>
       <div id="turn">whos turn is it</div>
+      <br>
       <div id="taketurn" class="grid-container">
         <div class="grid-button" id="0"></div>
         <div class="grid-button" id="1"></div>
@@ -184,6 +192,7 @@
         <div class="grid-item" id="05"></div>
         <div class="grid-item" id="06"></div>
       </div>
+      <br>
       <div id="color">
         <span>Color theme:</span>
         <button id="normalColor">Normal</button>
@@ -427,11 +436,13 @@
 
         socket.on("win game", function (name) {
           $("#turn").text(name + " has won the Connect 4 game!");
+          $("#turn").css("color", "rgb(0, 255, 0)");
           disableMove();
         });
 
         socket.on("tie game", function () {
           $("#turn").text("The connect 4 game ended in a draw.");
+          $("#turn").css("color", "rgb(0, 255, 0)");
           disableMove();
         });
 
