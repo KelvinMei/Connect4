@@ -197,7 +197,7 @@ io.on("connection", function (socket) {
     //horizontal
     console.log("Horizontal check");
     for (i = 0; i < 4; i++) {
-      if (board[up][right + i] == undefined) {
+      if (right + i > 6 || board[up][right + i] == undefined) {
         break;
       }
 
@@ -216,7 +216,7 @@ io.on("connection", function (socket) {
     //vertical
     console.log("vertical check");
     for (i = 0; i < 4; i++) {
-      if (board[up + i][right] == undefined) {
+      if (up + i > 5 || board[up + i][right] == undefined) {
         break;
       }
 
@@ -235,7 +235,11 @@ io.on("connection", function (socket) {
     //diagonal up right
     console.log("diagonal up right");
     for (i = 0; i < 4; i++) {
-      if (board[up + i][right + i] == undefined) {
+      if (
+        up + i > 5 ||
+        right + i > 6 ||
+        board[up + i][right + i] == undefined
+      ) {
         break;
       }
 
@@ -254,7 +258,11 @@ io.on("connection", function (socket) {
     //diagonal up left
     console.log("diagonal up left");
     for (i = 0; i < 4; i++) {
-      if (board[up + i][right - i] == undefined) {
+      if (
+        up + i > 5 ||
+        right - i < 0 ||
+        board[up + i][right - i] == undefined
+      ) {
         break;
       }
       if (board[up + i][right - i] == color) {

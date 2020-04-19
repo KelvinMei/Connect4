@@ -374,7 +374,7 @@
 
 
         $(".grid-button").click(function() {
-          if($(".grid-button").attr('disabled') == "disabled"){
+          if($("#"+this.id).attr('disabled') == "disabled"){
             return false;
           }
           else{
@@ -497,7 +497,6 @@
               ) == "Vibe"
             ){
               placeColor = "rgb(13, 152, 186)";
-
             } else if(document.cookie
               .split(";")
               .filter(item => item.trim().startsWith("color=")).length &&
@@ -509,7 +508,6 @@
               placeColor = "rgb(130, 238, 238)";
             } else {
               placeColor = "rgb(255, 0, 0)";
-
             }
           } else if(data.color == "rgb(255, 255, 0)"){
             if (document.cookie
@@ -532,14 +530,13 @@
               placeColor = "rgb(238, 238, 130)";
             } else {
               placeColor = "rgb(255, 255, 0)";
-
             }
-
           }
 
-
           $("#turn").text(data.name + ", it is your turn:");
+
           $(".grid-button").removeAttr('disabled');
+
 
           $(".grid-button").hover(function () {
             $(this).css("background", placeColor);
@@ -547,6 +544,18 @@
             $(this).css("background", backgroundColor);
           });
 
+          for(i = 0; i < 7; i++){
+            var restriction = window.getComputedStyle(document.getElementById("5"+i), null).getPropertyValue("background-color");
+            console.log(restriction);
+            if(restriction != "rgb(255, 255, 255)"){
+              $("#"+i).hover(function () {
+                $(this).css("background", "gray");
+              }, function () {
+                $(this).css("background", backgroundColor);
+              });
+              $("#"+i).attr('disabled', 'disabled');
+            }
+          }
         });
 
         socket.on("wait for turn", function (firstname) {
