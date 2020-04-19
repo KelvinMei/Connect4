@@ -161,6 +161,10 @@ io.on("connection", function (socket) {
       if (checkWin(socket.gameboard) == true) {
         //win
         io.to(rooms[0]).emit("win game", socket.username);
+      } else if (
+        !socket.gameboard.some((element) => element.includes(undefined))
+      ) {
+        io.to(rooms[0]).emit("tie game");
       } else {
         //keep playing
         io.sockets.connected[next[0]].emit("my turn", {
@@ -195,7 +199,6 @@ io.on("connection", function (socket) {
     var count = 0;
     var i = 0;
     //horizontal
-    console.log("Horizontal check");
     for (i = 0; i < 4; i++) {
       if (right + i > 6 || board[up][right + i] == undefined) {
         break;
@@ -214,7 +217,6 @@ io.on("connection", function (socket) {
     count = 0;
     i = 0;
     //vertical
-    console.log("vertical check");
     for (i = 0; i < 4; i++) {
       if (up + i > 5 || board[up + i][right] == undefined) {
         break;
@@ -233,7 +235,6 @@ io.on("connection", function (socket) {
     count = 0;
     i = 0;
     //diagonal up right
-    console.log("diagonal up right");
     for (i = 0; i < 4; i++) {
       if (
         up + i > 5 ||
@@ -256,7 +257,6 @@ io.on("connection", function (socket) {
     count = 0;
     i = 0;
     //diagonal up left
-    console.log("diagonal up left");
     for (i = 0; i < 4; i++) {
       if (
         up + i > 5 ||
@@ -274,8 +274,6 @@ io.on("connection", function (socket) {
         break;
       }
     }
-
-    console.log("done");
     return false;
   }
 

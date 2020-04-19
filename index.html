@@ -430,6 +430,11 @@
           disableMove();
         });
 
+        socket.on("tie game", function () {
+          $("#turn").text("The connect 4 game ended in a draw.");
+          disableMove();
+        });
+
         socket.on("populateGameBoard", function (data) {
           for(i = 0; i < 6; i++){
             for(j = 0; j < 7; j++){
